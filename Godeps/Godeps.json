@@ -1,0 +1,32 @@
+{
+	"ImportPath": "github.com/loganjspears/slackchess",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v60",
+	"Deps": [
+		{
+			"ImportPath": "github.com/ajstarks/svgo",
+			"Comment": "go.weekly.2012-01-27-117-g99831a8",
+			"Rev": "99831a8cf95786bcee3956cbf3f181c91bc37c24"
+		},
+		{
+			"ImportPath": "github.com/gorilla/schema",
+			"Rev": "14c555599c2a4f493c1e13fd1ea6fdf721739028"
+		},
+		{
+			"ImportPath": "github.com/loganjspears/chess",
+			"Rev": "26b8630b475e2f5e0bf08caeedc0bb49e106db52"
+		},
+		{
+			"ImportPath": "github.com/loganjspears/chessimg",
+			"Rev": "2705c56e8c7313f5fb4360c3e582fca21915a9ef"
+		},
+		{
+			"ImportPath": "github.com/loganjspears/chessimg/internal",
+			"Rev": "2705c56e8c7313f5fb4360c3e582fca21915a9ef"
+		},
+		{
+			"ImportPath": "github.com/lucasb-eyer/go-colorful",
+			"Rev": "e524a63fc3d334b573e6c1060c9b5866cf236626"
+		}
+	]
+}
