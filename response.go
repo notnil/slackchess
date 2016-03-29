@@ -47,10 +47,15 @@ func boardResponse(g *chess.Game) *Response {
 	whitePlayer := tagPairValueForKey(g, "White")
 	blackPlayer := tagPairValueForKey(g, "Black")
 	moveNum := (len(g.Moves()) / 2) + 1
-	a := &Attachment{
-		Fallback: g.FEN(),
-		Pretext:  fmt.Sprintf("@%s vs @%s on move #%d", whitePlayer, blackPlayer, moveNum),
-		ImageURL: imageURL(g),
+	resp := &Response{
+		ResponseType: responseTypeInChannel,
+		Attachments: []*Attachment{
+			{
+				Fallback: g.FEN(),
+				Pretext:  fmt.Sprintf("@%s vs @%s on move #%d", whitePlayer, blackPlayer, moveNum),
+				ImageURL: imageURL(g),
+			},
+		},
 	}
 	outcome := g.Outcome()
 	switch outcome {
@@ -64,22 +69,28 @@ func boardResponse(g *chess.Game) *Response {
 		} else if moveNum == 1 {
 			text = "Staring position"
 		}
-		a.Title = title
-		a.Text = text
+		resp.Attachments[0].Title = title
+		resp.Attachments[0].Text = text
 	case chess.WhiteWon:
-		a.Title = "White won"
-		a.Text = "White won by " + g.Method().String()
+		resp.Attachments[0].Title = "White won"
+		resp.Attachments[0].Text = "White won by " + g.Method().String()
+		resp.Attachments = append(resp.Attachments, &Attachment{
+			Text: g.String(),
+		})
 	case chess.BlackWon:
-		a.Title = "Black won"
-		a.Text = "Black won by " + g.Method().String()
+		resp.Attachments[0].Title = "Black won"
+		resp.Attachments[0].Text = "Black won by " + g.Method().String()
+		resp.Attachments = append(resp.Attachments, &Attachment{
+			Text: g.String(),
+		})
 	case chess.Draw:
-		a.Title = "Draw"
-		a.Text = "Draw by " + g.Method().String()
+		resp.Attachments[0].Title = "Draw"
+		resp.Attachments[0].Text = "Draw by " + g.Method().String()
+		resp.Attachments = append(resp.Attachments, &Attachment{
+			Text: g.String(),
+		})
 	}
-	return &Response{
-		ResponseType: responseTypeInChannel,
-		Attachments:  []*Attachment{a},
-	}
+	return resp
 }
 
 func imageURL(g *chess.Game) string {
@@ -144,5 +155,5 @@ const (
 	invalidMoveText = "Invalid move!  Please use Algebraic Notation: https://en.wikipedia.org/wiki/Algebraic_notation_(chess)"
 	noDrawToAccept  = "There is no draw offer to accept!"
 
-	helpText = "The chess slash command adds chess playing capabilities to slack.  Here is the list of commands:\n*/chess help* - this help screen\n*/chess play* - 'chess play @magnus' will start a game against the other player in this channel.  There can only be one game per channel and starting a new game will end any in progress.\n*/chess board* - will show the board of the current game\n*/chess move* - 'chess move e4' will move the player using the given Algebraic Notation\n*/chess resign* - resigns the current game\n*/chess draw offer* - offers a draw to other player\n*/chess draw accept* - accepts the draw offer\n*/chess draw reject* - rejects the draw offer (also moving will reject a draw offer)"
+	helpText = "The chess slash command adds chess playing capabilities to slack.  Here is the list of commands:\n*/chess help* - this help screen\n*/chess play* - 'chess play @magnus' will start a game against the other player in this channel.  There can only be one game per channel and starting a new game will end any in progress.\n*/chess board* - will show the board of the current game\n*/chess pgn* - will show the PGN of the current game\n*/chess move* - 'chess move e4' will move the player using the given Algebraic Notation\n*/chess resign* - resigns the current game\n*/chess draw offer* - offers a draw to other player\n*/chess draw accept* - accepts the draw offer\n*/chess draw reject* - rejects the draw offer (also moving will reject a draw offer)"
 )

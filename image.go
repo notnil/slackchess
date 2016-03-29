@@ -12,7 +12,7 @@ import (
 	"github.com/loganjspears/chessimg"
 )
 
-func writeImage(g *chess.Game, w io.Writer) error {
+func writeImage(w io.Writer, g *chess.Game, sqs ...chess.Square) error {
 	// create temp svg file to be used by rsvg-convert
 	fileName := fmt.Sprint(time.Now().UnixNano())
 	tempSVG, err := os.Create(fileName + ".svg")
@@ -21,6 +21,7 @@ func writeImage(g *chess.Game, w io.Writer) error {
 	}
 	defer tempSVG.Close()
 	defer os.Remove(fileName + ".svg")
+	// mark := chessimg.MarkSquares(color.RGBA{R: 255, G: 255, B: 0, A: 1}, sqs)
 	if err := chessimg.New(tempSVG).EncodeSVG(g.FEN()); err != nil {
 		return errors.New("could not write to svg file " + err.Error())
 	}

@@ -44,6 +44,25 @@ var (
 				noGameResponse,
 			},
 		},
+		// pgn
+		{
+			SlashCommands: []*SlashCmd{
+				newSlashCmd("test", "logan", "play magnus"),
+				newSlashCmd("test", "logan", "pgn"),
+			},
+			Responses: []*Response{
+				boardResponse(testGame("logan", "magnus")),
+				pgnResponse(testGame("logan", "magnus")),
+			},
+		},
+		{
+			SlashCommands: []*SlashCmd{
+				newSlashCmd("board2", "logan", "board"),
+			},
+			Responses: []*Response{
+				noGameResponse,
+			},
+		},
 		// play and move
 		{
 			SlashCommands: []*SlashCmd{
@@ -117,5 +136,18 @@ func TestValidSlashTests(t *testing.T) {
 		for fileName := range fileNames {
 			os.Remove(fileName)
 		}
+	}
+}
+
+func TestLastMoveTest(t *testing.T) {
+	g := chess.NewGame()
+	if err := g.MoveAlg("e4"); err != nil {
+		t.Fatal(err)
+	}
+	if err := g.MoveAlg("e5"); err != nil {
+		t.Fatal(err)
+	}
+	if lastMoveText(g) != "e5" {
+		t.Fatalf("last move text expected %s but got %s", "e5", lastMoveText(g))
 	}
 }

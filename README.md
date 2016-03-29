@@ -34,6 +34,14 @@ The board command will show the current board.
 chess board
 ```
 
+### pgn
+
+The pgn command will show the current [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation).
+
+```
+chess board
+```
+
 ### move
 
 The move command takes a move in Algebraic Notation and moves the player.

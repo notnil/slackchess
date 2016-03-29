@@ -85,8 +85,8 @@ func tagPairValueForKey(g *chess.Game, key string) string {
 func lastMoveText(g *chess.Game) string {
 	pgn := g.String()
 	parts := strings.Split(pgn, " ")
-	if len(parts) == 0 {
+	if len(parts) <= 2 {
 		return ""
 	}
-	return parts[len(parts)-1]
+	return parts[len(parts)-3]
 }
