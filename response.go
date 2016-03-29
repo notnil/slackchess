@@ -94,8 +94,14 @@ func boardResponse(g *chess.Game) *Response {
 }
 
 func imageURL(g *chess.Game) string {
-	// http://104.196.27.70/board/rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR.png
-	return fmt.Sprintf("%s/board/%s.png", url, g.Position().Board().String())
+	queryStr := ""
+	moves := g.Moves()
+	if len(moves) > 0 {
+		m := moves[len(moves)-1]
+		queryStr = fmt.Sprintf("?markSquares=%s,%s", m.S1().String(), m.S2().String())
+	}
+	// http://104.196.27.70/board/rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR.png?markSquares=e2,e4
+	return fmt.Sprintf("%s/board/%s.png%s", url, g.Position().Board().String(), queryStr)
 }
 
 var (

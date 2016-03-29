@@ -18,15 +18,11 @@
 		},
 		{
 			"ImportPath": "github.com/loganjspears/chessimg",
-			"Rev": "2705c56e8c7313f5fb4360c3e582fca21915a9ef"
+			"Rev": "63d5893490bc03dacbd4389f0006f6711ea92b3f"
 		},
 		{
 			"ImportPath": "github.com/loganjspears/chessimg/internal",
-			"Rev": "2705c56e8c7313f5fb4360c3e582fca21915a9ef"
-		},
-		{
-			"ImportPath": "github.com/lucasb-eyer/go-colorful",
-			"Rev": "e524a63fc3d334b573e6c1060c9b5866cf236626"
+			"Rev": "63d5893490bc03dacbd4389f0006f6711ea92b3f"
 		}
 	]
 }

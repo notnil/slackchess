@@ -90,12 +90,33 @@ func boardImgHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "could not parse fen "+err.Error(), http.StatusNotFound)
 		return
 	}
+	v := r.URL.Query()
+	sqs := squaresFromString(v.Get("markSquares"))
 	g := chess.NewGame(fen)
 	log.Println("creating image for fen ", path)
 	w.Header().Set("Content-Type", "image/png")
 	w.Header().Set("Cache-Control", "max-age=31536000")
-	if err := writeImage(g, w); err != nil {
+	if err := writeImage(w, g, sqs...); err != nil {
 		http.Error(w, "could not parse fen "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+// s must be in the format: a1,b2,c3
+func squaresFromString(s string) []chess.Square {
+	sqStrs := strings.Split(s, ",")
+	sqs := []chess.Square{}
+	for _, s := range sqStrs {
+		if s == "" {
+			continue
+		}
+		for i := 0; i < 64; i++ {
+			sq := chess.Square(i)
+			if sq.String() == s {
+				sqs = append(sqs, sq)
+				break
+			}
+		}
+	}
+	return sqs
 }
