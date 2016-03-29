@@ -11,8 +11,7 @@ ADD . /go/src/github.com/loganjspears/slackchess
 RUN go install github.com/loganjspears/slackchess
 
 # required for rsvg-convert dependency
-RUN apt-get -y update
-RUN apt-get -y install librsvg2-bin
+RUN apt-get -y update && apt-get install -y librsvg2-bin
 
 # Run the outyet command by default when the container starts.
 ENTRYPOINT /go/bin/slackchess -token=$TOKEN -url=$URL
