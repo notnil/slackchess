@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"os"
 	"testing"
 
@@ -94,6 +95,22 @@ var (
 				})),
 			},
 		},
+		// resign
+		{
+			SlashCommands: []*SlashCmd{
+				newSlashCmd("test", "logan", "play magnus"),
+				newSlashCmd("test", "logan", "move e4"),
+				newSlashCmd("test", "magnus", "resign"),
+			},
+			Responses: []*Response{
+				boardResponse(testGame("logan", "magnus")),
+				boardResponse(testGame("logan", "magnus", "e4")),
+				boardResponse(testGameConfig("logan", "magnus", func(g *chess.Game) {
+					g.MoveAlg("e4")
+					g.Resign(chess.Black)
+				})),
+			},
+		},
 	}
 )
 
@@ -128,6 +145,7 @@ func TestValidSlashTests(t *testing.T) {
 			actual := s.Response()
 			expectedB, _ := json.Marshal(expected)
 			actualB, _ := json.Marshal(actual)
+			log.Println(string(actualB))
 			if string(expectedB) != string(actualB) {
 				t.Fatalf("expected %s but got %s", string(expectedB), string(actualB))
 			}
@@ -136,18 +154,5 @@ func TestValidSlashTests(t *testing.T) {
 		for fileName := range fileNames {
 			os.Remove(fileName)
 		}
-	}
-}
-
-func TestLastMoveTest(t *testing.T) {
-	g := chess.NewGame()
-	if err := g.MoveAlg("e4"); err != nil {
-		t.Fatal(err)
-	}
-	if err := g.MoveAlg("e5"); err != nil {
-		t.Fatal(err)
-	}
-	if lastMoveText(g) != "e5" {
-		t.Fatalf("last move text expected %s but got %s", "e5", lastMoveText(g))
 	}
 }

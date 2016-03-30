@@ -12,7 +12,7 @@ func TestImage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := writeImage(chess.NewGame(), f); err != nil {
+	if err := writeImage(f, chess.NewGame()); err != nil {
 		t.Fatal(err)
 	}
 }

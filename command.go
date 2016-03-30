@@ -49,7 +49,8 @@ func CommandFromText(text string) Command {
 	} else if len(parts) == 2 && parts[0] == "move" {
 		return Command{Type: Move, Args: []string{parts[1]}}
 	} else if len(parts) == 2 && parts[0] == "play" {
-		return Command{Type: Play, Args: []string{parts[1]}}
+		username := strings.Replace(parts[1], "@", "", -1)
+		return Command{Type: Play, Args: []string{username}}
 	}
 	return Command{Type: UnknownCommand, Args: []string{}}
 }

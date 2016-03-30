@@ -32,64 +32,59 @@ type Attachment struct {
 }
 
 // {
-//     "attachments": [
-//         {
-//             "fallback": "fen string",
-//             "pretext": "@magnus vs @logan on move #3",
-//             "title": "White to move",
-//             "text": "Last move by black: e4\n♗♗\t♜♜",
-//             "image_url": "http://files.chesscomfiles.com/images_users/tiny_mce/knowthyself/chess%20screen%20capture.PNG",
-//             "thumb_url": "http://example.com/path/to/thumb.png"
-//         }
-//     ]
+// 	"attachments":[
+// 		{
+// 			"fallback":"White to move",
+// 			"text":"@logan vs @magnus on move #2",
+// 			"title":"White to move",
+// 			"image_url":"http://slack.pawnbreak.com/board/rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR.png?markSquares=e7,e5"
+// 		}
+// 	]
 // }
 func boardResponse(g *chess.Game) *Response {
 	whitePlayer := tagPairValueForKey(g, "White")
 	blackPlayer := tagPairValueForKey(g, "Black")
 	moveNum := (len(g.Moves()) / 2) + 1
+	color := "#f2f2f2"
+	if g.Position().Turn() == chess.Black {
+		color = "#000000"
+	}
 	resp := &Response{
 		ResponseType: responseTypeInChannel,
-		Attachments: []*Attachment{
-			{
-				Fallback: g.FEN(),
-				Pretext:  fmt.Sprintf("@%s vs @%s on move #%d", whitePlayer, blackPlayer, moveNum),
-				ImageURL: imageURL(g),
-			},
-		},
+		Attachments: []*Attachment{{
+			ImageURL: imageURL(g),
+			Color:    color,
+		}},
 	}
 	outcome := g.Outcome()
 	switch outcome {
 	case chess.NoOutcome:
-		last := lastMoveText(g)
 		title := "White to move"
-		text := "Last move by black: " + last
 		if g.Position().Turn() == chess.Black {
 			title = "Black to move"
-			text = "Last move by white: " + last
-		} else if moveNum == 1 {
-			text = "Staring position"
 		}
+		resp.Attachments[0].Text = fmt.Sprintf("@%s vs @%s on move #%d", whitePlayer, blackPlayer, moveNum)
 		resp.Attachments[0].Title = title
-		resp.Attachments[0].Text = text
 	case chess.WhiteWon:
 		resp.Attachments[0].Title = "White won"
-		resp.Attachments[0].Text = "White won by " + g.Method().String()
+		resp.Attachments[0].Text = fmt.Sprintf("🏆 @%s defeated @%s by %s on move #%d", whitePlayer, blackPlayer, g.Method().String(), moveNum)
 		resp.Attachments = append(resp.Attachments, &Attachment{
 			Text: g.String(),
 		})
 	case chess.BlackWon:
 		resp.Attachments[0].Title = "Black won"
-		resp.Attachments[0].Text = "Black won by " + g.Method().String()
+		resp.Attachments[0].Text = fmt.Sprintf("🏆 @%s defeated @%s by %s on move #%d", whitePlayer, blackPlayer, g.Method().String(), moveNum)
 		resp.Attachments = append(resp.Attachments, &Attachment{
 			Text: g.String(),
 		})
 	case chess.Draw:
 		resp.Attachments[0].Title = "Draw"
-		resp.Attachments[0].Text = "Draw by " + g.Method().String()
+		resp.Attachments[0].Text = fmt.Sprintf("Draw by %s on move #%d", g.Method().String(), moveNum)
 		resp.Attachments = append(resp.Attachments, &Attachment{
 			Text: g.String(),
 		})
 	}
+	resp.Attachments[0].Fallback = resp.Attachments[0].Title
 	return resp
 }
 
@@ -161,5 +156,5 @@ const (
 	invalidMoveText = "Invalid move!  Please use Algebraic Notation: https://en.wikipedia.org/wiki/Algebraic_notation_(chess)"
 	noDrawToAccept  = "There is no draw offer to accept!"
 
-	helpText = "The chess slash command adds chess playing capabilities to slack.  Here is the list of commands:\n*/chess help* - this help screen\n*/chess play* - 'chess play @magnus' will start a game against the other player in this channel.  There can only be one game per channel and starting a new game will end any in progress.\n*/chess board* - will show the board of the current game\n*/chess pgn* - will show the PGN of the current game\n*/chess move* - 'chess move e4' will move the player using the given Algebraic Notation\n*/chess resign* - resigns the current game\n*/chess draw offer* - offers a draw to other player\n*/chess draw accept* - accepts the draw offer\n*/chess draw reject* - rejects the draw offer (also moving will reject a draw offer)"
+	helpText = "The chess slash command adds chess playing capabilities to slack.  Here is the list of commands:\n*/chess help* - this help screen\n*/chess play* - '/chess play @magnus' will start a game against the other player in this channel.  There can only be one game per channel and starting a new game will end any in progress.\n*/chess board* - will show the board of the current game\n*/chess pgn* - will show the PGN of the current game\n*/chess move* - 'chess move e4' will move the player using the given Algebraic Notation\n*/chess resign* - resigns the current game\n*/chess draw offer* - offers a draw to other player\n*/chess draw accept* - accepts the draw offer\n*/chess draw reject* - rejects the draw offer (also moving will reject a draw offer)"
 )
