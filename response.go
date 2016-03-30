@@ -73,7 +73,7 @@ func boardResponse(g *chess.Game) *Response {
 		})
 	case chess.BlackWon:
 		resp.Attachments[0].Title = "Black won"
-		resp.Attachments[0].Text = fmt.Sprintf("🏆 @%s defeated @%s by %s on move #%d", whitePlayer, blackPlayer, g.Method().String(), moveNum)
+		resp.Attachments[0].Text = fmt.Sprintf("🏆 @%s defeated @%s by %s on move #%d", blackPlayer, whitePlayer, g.Method().String(), moveNum)
 		resp.Attachments = append(resp.Attachments, &Attachment{
 			Text: g.String(),
 		})
