@@ -4,14 +4,10 @@ import (
 	"bytes"
 	"crypto/md5"
 	"fmt"
+	"runtime"
 	"testing"
 
 	"github.com/loganjspears/chess"
-)
-
-const (
-	// md5 hash of test.png
-	expectedMD5 = "6f711cc83010cc0694943171ea3c8518"
 )
 
 func TestImage(t *testing.T) {
@@ -24,8 +20,16 @@ func TestImage(t *testing.T) {
 	if err := WritePNG(buf, p, chess.E2, chess.E4); err != nil {
 		t.Fatal(err)
 	}
-	actualMD5 := fmt.Sprintf("%x", md5.Sum(buf.Bytes()))
-	if expectedMD5 != actualMD5 {
-		t.Fatalf("expected %s md5 hash but got %s", expectedMD5, actualMD5)
+	actual := fmt.Sprintf("%x", md5.Sum(buf.Bytes()))
+	expected := getExpectedMD5Hash()
+	if expected != actual {
+		t.Fatalf("expected %s md5 hash but got %s", expected, actual)
 	}
+}
+
+func getExpectedMD5Hash() string {
+	if runtime.GOOS == "darwin" {
+		return "6f711cc83010cc0694943171ea3c8518"
+	}
+	return "9285d53f67bfb762771d43d2d63462e9"
 }
