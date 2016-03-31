@@ -22,7 +22,7 @@ To start the Slack Integration Guide you will need the IP or URL of your server.
 
 ### Digital Ocean Setup Guide
 
-1. Signup for Digital Ocean if you don't have an account (https://m.do.co/c/f4609bed935c referal code to get $10 free)
+1. Signup for Digital Ocean if you don't have an account (https://m.do.co/c/f4609bed935c referal link to get $10 free)
 2. Click Create Droplet
 3. Select One-click Apps > Docker 
 4. Choose smallest size
