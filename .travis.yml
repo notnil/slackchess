@@ -5,8 +5,10 @@ go_import_path: github.com/loganjspears/slackchess
 go:
   - 1.6
 
+sudo: true
+
 before_install:
-  - apt-get -y -qq update 
-  - apt-get install -y librsvg2-bin
+  - sudo apt-get -y -qq update 
+  - sudo apt-get install -y librsvg2-bin
     
 script: go test -v ./...
