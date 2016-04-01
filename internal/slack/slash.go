@@ -237,6 +237,10 @@ func userEntryFromText(text string) userEntry {
 }
 
 func checkForStockfishMove(g *chess.Game) error {
+	// bot can't move if game is over
+	if g.Outcome() != chess.NoOutcome {
+		return nil
+	}
 	c := g.Position().Turn()
 	isBot, skillLvl := chessutil.BotForColor(g, c)
 	if !isBot {
