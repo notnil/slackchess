@@ -6,12 +6,12 @@ How can you play chess on any device?
 Slack!  
 
 This project gives you a turn key solution for tranforming slack into a chess client. slackchess is built with:
+- challenge another player
+- play against @slackbot powered by [Stockfish](https://stockfishchess.org)
 - full [chess engine](https://github.com/loganjspears/chess)
 - draw and resignation support
 - PGN output
-- challenge another player
 - previous move highlighting
-- play against [Stockfish](https://stockfishchess.org)
 
 
 ## Screenshot
@@ -70,6 +70,16 @@ docker ps
 Thats it!
 
 ## Commands
+
+Play against user:
+```
+/chess play @user
+```
+
+Play against bot:
+```
+/chess play @slackbot
+```
 
 You can view all commands by using the help command.
 ```
