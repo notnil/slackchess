@@ -5,21 +5,18 @@ How can you play chess on any device?
 
 Slack!  
 
-This project gives you a turn key solution for tranforming slack into a chess client. slackchess is built with:
-- challenge another player
+This project gives you a turn key solution for tranforming slack into a chess client. With slackchess you can:
+- challenge another slack user
 - play against @slackbot powered by [Stockfish](https://stockfishchess.org)
-- full [chess engine](https://github.com/loganjspears/chess)
-- draw and resignation support
-- PGN output
-- previous move highlighting
-
+- offer draws and resign
+- export your game as a PGN
 
 ## Screenshot
 <img src="https://raw.githubusercontent.com/loganjspears/slackchess/master/screen_shots/screen_shot_1.png" width="600">
 
 ## Installation Guide
 
-To start the Slack Integration Guide you will need the IP or URL of your server.  If you don't already have a place to host slackchess, you can follow the Digital Ocean Setup Guide first.  After the Slack Integration is setup, you should follow the Server Setup Guide.  The Server Setup Guide will guide you through installing slackchess on a server with docker installed.  
+To start the Slack Integration Guide you will need the IP or URL of your server.  If you don't already have a place to host slackchess, you can follow the Digital Ocean Setup Guide first.  After the Slack Integration is setup, you should follow the Server Setup Guide.  The Server Setup Guide will guide you through pulling down the [docker image](https://hub.docker.com/r/loganjspears/slackchess/) and running it as a container.  
 
 ### Digital Ocean Setup Guide
 
