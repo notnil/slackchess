@@ -31,7 +31,7 @@ func main() {
 		log.Fatal("must set url flag")
 	}
 	slack.SetBaseURL(url)
-	slack.SetStockfishPath("$GOPATH/src/github.com/loganjspears/slackchess/internal/stockfish")
+	slack.SetStockfishPath("/go/src/github.com/loganjspears/slackchess/internal/stockfish")
 	http.HandleFunc("/", logHandler(upHandler))
 	http.HandleFunc("/command", logHandler(commandHandler))
 	http.HandleFunc("/board/", logHandler(boardImgHandler))
