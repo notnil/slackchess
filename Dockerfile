@@ -2,7 +2,7 @@
 FROM golang:1.6.0-wheezy
 
 # required for rsvg-convert dependency
-RUN apt-get -y update && apt-get install -y librsvg2-bin
+RUN apt-get -y update && apt-get install -y librsvg2-bin && apt-get install -y libc6
 
 # Copy the local package files to the container's workspace.
 ADD . /go/src/github.com/loganjspears/slackchess
