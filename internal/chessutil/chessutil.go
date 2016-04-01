@@ -29,7 +29,7 @@ func BotForColor(g *chess.Game, c chess.Color) (isBot bool, skillLvl int) {
 		return true, 10
 	} else if isBot && len(parts) == 2 {
 		i, err := strconv.Atoi(parts[1])
-		if err == nil && (i < 0 || i > 20) {
+		if err == nil && (i >= 0 && i <= 20) {
 			return true, i
 		}
 	}

@@ -11,9 +11,8 @@ This project gives you a turn key solution for tranforming slack into a chess cl
 - PGN output
 - challenge another player
 - previous move highlighting
-
-The roadmap includes:
 - play against [Stockfish](https://stockfishchess.org)
+
 
 ## Screenshot
 <img src="https://raw.githubusercontent.com/loganjspears/slackchess/master/screen_shots/screen_shot_1.png" width="600">

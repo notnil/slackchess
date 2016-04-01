@@ -169,3 +169,17 @@ func TestPlayStockfish(t *testing.T) {
 		t.Fatal(string(b))
 	}
 }
+
+func TestPlayStockfishWithSkillLevel(t *testing.T) {
+	SetStockfishPath("../stockfish")
+	cmd := newSlashCmd("test", "logan", "play slackbot:5 black")
+	resp := cmd.Response()
+	g, err := cmd.Game()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(g.Moves()) != 1 {
+		b, _ := json.Marshal(resp)
+		t.Fatal(string(b))
+	}
+}
