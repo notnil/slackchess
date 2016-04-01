@@ -1,4 +1,6 @@
 # slackchess
+[![Build Status](https://travis-ci.org/loganjspears/slackchess.svg?branch=master)](https://travis-ci.org/loganjspears/slackchess)
+
 How can you play chess on any device?  
 
 Slack!  

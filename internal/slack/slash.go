@@ -3,20 +3,29 @@ package slack
 import (
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/loganjspears/chess"
 	"github.com/loganjspears/slackchess/internal/chessutil"
+	"github.com/loganjspears/slackchess/internal/stockfish"
 )
 
 var (
-	baseURL = ""
+	baseURL       = ""
+	stockfishPath = ""
 )
 
 // SetBaseURL sets the baseURL used in the board image URL embedded in slack attachments.
 func SetBaseURL(url string) {
 	baseURL = url
+}
+
+// SetStockfishPath sets the path to the stockfish folder
+func SetStockfishPath(path string) {
+	stockfishPath = path
 }
 
 // SlashCmd represents a slack "Slash Command".  You can read more about
@@ -43,7 +52,24 @@ func (s *SlashCmd) Response() *Response {
 	case cmdHelp:
 		return helpResponse
 	case cmdPlay:
-		g := chessutil.NewGame(s.UserName, cmd.Args[0])
+		var g *chess.Game
+		switch cmd.Args[1] {
+		case "", "white":
+			g = chessutil.NewGame(s.UserName, cmd.Args[0])
+		case "black":
+			g = chessutil.NewGame(cmd.Args[0], s.UserName)
+		case "random":
+			rand.Seed(time.Now().UnixNano())
+			r := rand.Intn(2)
+			if r == 0 {
+				g = chessutil.NewGame(s.UserName, cmd.Args[0])
+			} else {
+				g = chessutil.NewGame(cmd.Args[0], s.UserName)
+			}
+		}
+		if err := checkForStockfishMove(g); err != nil {
+			return errorResponse(err)
+		}
 		if err := s.SaveGame(g); err != nil {
 			return errorResponse(err)
 		}
@@ -67,6 +93,9 @@ func (s *SlashCmd) Response() *Response {
 			return invalidMoveResponse
 		}
 		g = chessutil.RemoveDrawOffer(g)
+		if err := checkForStockfishMove(g); err != nil {
+			return errorResponse(err)
+		}
 		if err := s.SaveGame(g); err != nil {
 			return errorResponse(err)
 		}
@@ -196,9 +225,26 @@ func userEntryFromText(text string) userEntry {
 		}
 	} else if len(parts) == 2 && parts[0] == "move" {
 		return userEntry{Type: cmdMove, Args: []string{parts[1]}}
-	} else if len(parts) == 2 && parts[0] == "play" {
+	} else if (len(parts) == 2 || len(parts) == 3) && parts[0] == "play" {
 		username := strings.Replace(parts[1], "@", "", -1)
-		return userEntry{Type: cmdPlay, Args: []string{username}}
+		colorTxt := ""
+		if len(parts) == 3 {
+			colorTxt = parts[2]
+		}
+		return userEntry{Type: cmdPlay, Args: []string{username, colorTxt}}
 	}
 	return userEntry{Type: cmdUnknown, Args: []string{}}
+}
+
+func checkForStockfishMove(g *chess.Game) error {
+	c := g.Position().Turn()
+	isBot, skillLvl := chessutil.BotForColor(g, c)
+	if !isBot {
+		return nil
+	}
+	move, err := stockfish.Move(g, skillLvl, stockfishPath)
+	if err != nil {
+		return err
+	}
+	return g.Move(move)
 }

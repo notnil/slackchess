@@ -1,6 +1,7 @@
 package chessutil
 
 import (
+	"strconv"
 	"strings"
 	"time"
 
@@ -18,6 +19,21 @@ func NewGame(whitePlayer, blackPlayer string) *chess.Game {
 		{Key: "Annotator", Value: "slackchess"},
 	}
 	return chess.NewGame(chess.TagPairs(tagPairs))
+}
+
+func BotForColor(g *chess.Game, c chess.Color) (isBot bool, skillLvl int) {
+	player := PlayerForColor(g, c)
+	parts := strings.Split(player, ":")
+	isBot = player == "slackbot" || (len(parts) > 0 && parts[0] == "slackbot")
+	if isBot && len(parts) == 1 {
+		return true, 10
+	} else if isBot && len(parts) == 2 {
+		i, err := strconv.Atoi(parts[1])
+		if err == nil && (i < 0 || i > 20) {
+			return true, i
+		}
+	}
+	return false, 0
 }
 
 // AddDrawOffer adds the "Draw Offer" tag pair showing a pending draw offer.
