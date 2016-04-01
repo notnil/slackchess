@@ -10,5 +10,6 @@ sudo: true
 before_install:
   - sudo apt-get -y -qq update 
   - sudo apt-get install -y librsvg2-bin
+  - sudo apt-get install -y libc6
     
 script: go test ./internal/...
