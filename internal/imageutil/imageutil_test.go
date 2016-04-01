@@ -31,5 +31,5 @@ func getExpectedMD5Hash() string {
 	if runtime.GOOS == "darwin" {
 		return "6f711cc83010cc0694943171ea3c8518"
 	}
-	return "9285d53f67bfb762771d43d2d63462e9"
+	return "954a16709a5ee00d5f34bec0d01a3fcc"
 }
