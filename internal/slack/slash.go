@@ -41,6 +41,7 @@ type SlashCmd struct {
 	Command     string `schema:"command"`
 	Text        string `schema:"text"`
 	ResponseURL string `schema:"response_url"`
+	TriggerID	string `schema:"trigger_id"`
 }
 
 // Response returns the response to the given command.
